@@ -3,7 +3,6 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,17 +18,41 @@ public interface EmployeeMapper {
     Employee getByUsername(String username);
 
     /**
-     * 新增员工
+     * 新增员工信息
      * @param employee
+     * @author Slow
+     * @CurrentTime 2024年7月29日15:39:06
      */
-    @Insert("insert into employee(name,username,password,phone,sex,id_number,status,create_time,update_time,create_user,update_user) " +
-            "values (#{name}, #{username}, #{password}, #{phone}, #{sex}, #{idNumber}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
-    void insert(Employee employee);
+    void insertEmployee(Employee employee);
 
     /**
-     * 分页查询
+     * 员工信息分页查询
+     *
      * @param employeePageQueryDTO
      * @return
+     * @author Slow
+     * @CurrentTime 2024年7月29日15:39:48
      */
-    Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+    Page<Employee> pageQueryEmployee(EmployeePageQueryDTO employeePageQueryDTO);
+
+
+
+    /**
+     * 启用禁用员工账号
+     *
+     * @param employee
+     * @author Slow
+     * @currentTime 2024年7月29日17:09:10
+     */
+    void update(Employee employee);
+
+
+
+    /**
+     * 根据id查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    Employee QueryEmployeeById(Long id);
 }

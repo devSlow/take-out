@@ -6,7 +6,6 @@ import java.util.List;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
-import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
@@ -69,40 +68,78 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+
     /**
-     * 新增员工
-     *
      * @param employeeDTO
+     * @author Slow
+     * @CurrentTime 2024年7月29日12:21:09
      */
-    @Override
-    public void save(EmployeeDTO employeeDTO) {
+    public void insertEmployee(EmployeeDTO employeeDTO) {
+        //实现类方便提交前端传的数据，最后给到持久层还是employee
         Employee employee = new Employee();
+//        对象属性拷贝
         BeanUtils.copyProperties(employeeDTO, employee);
         employee.setStatus(StatusConstant.ENABLE);
+        employee.setPassword(DigestUtils.md5DigestAsHex(("123456" + SALT).getBytes()));
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setPassword(DigestUtils.md5DigestAsHex(("123456" + SALT).getBytes()));
-        employeeMapper.insert(employee);
+        employee.setCreateUser(employee.getCreateUser());
+        employee.setUpdateUser(employee.getUpdateUser());
+        employeeMapper.insertEmployee(employee);
     }
 
     /**
-     * 分页查询
      * @param employeePageQueryDTO
      * @return
+     * @author Slow
+     * @CurrentTime 2024年7月29日15:36:41
      */
-
-    @Override
-    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
-//        开始分页
-        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize());
-       Page<Employee> page=employeeMapper.pageQuery(employeePageQueryDTO);
+//    在serviceImpl中使用pageHelper实现分页
+    public PageResult pageQueryEmployee(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+//        调用DAO的时候，需要返回page对象
+        Page<Employee> page = employeeMapper.pageQueryEmployee(employeePageQueryDTO);
         long total = page.getTotal();
         List<Employee> result = page.getResult();
-        PageResult pageResult = new PageResult(total, result);
+        return new PageResult(total, result);
+    }
 
-        return pageResult;
+    /**
+     * 启用禁用员工账号
+     *
+     * @param status
+     * @param id
+     * @author Slow
+     * @CurrentTime 2024年7月29日17:08:02
+     */
+    public void startOrStop(Integer status, Long id) {
+//        update语句修改，使其更有通用性
+        Employee employee = new Employee();
+        employee.setId(id);
+        employee.setStatus(status);
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 编辑员工信息
+     *
+     * @param employeeDTO
+     * @author Slow
+     * @currentTime 2024年7月29日20:01:09
+     */
+    public void updateEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
+    }
+
+
+    public Employee QueryEmployeeById(Long id) {
+      Employee employee=  employeeMapper.QueryEmployeeById(id);
+      employee.setPassword("*******");
+        return employee;
     }
 }
 

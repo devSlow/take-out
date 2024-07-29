@@ -2,13 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.EmployeeMapper">
-    <select id="pageQuery" resultType="com.sky.entity.Employee">
-        select *from employee
+
+    <!--    新增员工信息-->
+    <insert id="insertEmployee">
+        insert into employee(name, username, password, status, phone, sex, id_number, create_time,
+                             create_user,
+                             update_user)
+        values (#{name}, #{username}, #{password}, #{status}, #{phone}, #{sex}, #{idNumber}, #{createTime},
+                #{createUser}, #{updateUser})
+    </insert>
+
+    <!--    员工分页查询-->
+    <select id="pageQueryEmployee" resultType="com.sky.entity.Employee">
+        select * from employee
         <where>
-        <if test="name!=''and name!=null">
-            and name like concat('%',#{name},'%')
-        </if>
+            <if test="name!='' and name!=null">
+                and name like concat(%#{name}%)
+            </if>
         </where>
         order by create_time desc
     </select>
+    <!--    根据id查询员工信息-->
+    <select id="QueryEmployeeById" resultType="com.sky.entity.Employee">
+        SELECT *
+        FROM employee
+        where id = #{id}
+    </select>
+
+    <!--    启用禁用员工账号-->
+    <!--    动态sql 可以使用<set>-->
+    <update id="update" parameterType="employee">
+        update employee
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="username!=null">username=#{username},</if>
+            <if test="password!=null">password=#{password},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="idNumber!=null">id_Number=#{idNumber},</if>
+            <if test="updateTime!=null">update_Time=#{updateTime},</if>
+            <if test="updateUser!=null">update_User=#{updateUser},</if>
+            <if test="status!=null">status=#{status},</if>
+        </set>
+        where id=#{id}
+    </update>
+
 </mapper>

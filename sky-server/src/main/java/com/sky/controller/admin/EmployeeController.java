@@ -66,18 +66,6 @@ public class EmployeeController {
         return Result.success(employeeLoginVO);
     }
 
-
-    /**
-     * 新增员工
-     */
-    @PostMapping
-    @ApiOperation("新增员工")
-    public Result save(@RequestBody EmployeeDTO employeeDTO){
-        employeeService.save(employeeDTO);
-        return Result.success();
-    }
-
-
     /**
      * 退出
      *
@@ -88,15 +76,65 @@ public class EmployeeController {
     public Result<String> logout() {
         return Result.success();
     }
+
     /**
-     * 员工分页查询
+     * 新增员工信息
+     *
+     * @author Slow
+     * @currentTime 2024年7月29日15:30:08
      */
+    @PostMapping()
+    @ApiOperation("新增员工")
+    public Result insertEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        employeeService.insertEmployee(employeeDTO);
+        return Result.success();
+    }
+
+    /**
+     * 员工信息分页
+     *
+     * @author slow
+     * @currentTime 2024年7月29日15:30:49
+     */
+//    涉及到查询操作，需要指定泛型
     @GetMapping("/page")
     @ApiOperation("员工分页查询")
-    public Result<PageResult> pageQuery(EmployeePageQueryDTO employeePageQueryDTO){
-        log.info("员工分页查询{}", employeePageQueryDTO);
-        PageResult pageResult= employeeService.pageQuery(employeePageQueryDTO);
+    public Result<PageResult> pageQueryEmployee(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageResult pageResult = employeeService.pageQueryEmployee(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 启用禁用员工账号
+     *
+     * @author slow
+     * @currentTime 2024年7月29日16:59:31
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工账号")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        employeeService.startOrStop(status, id);
+        return Result.success();
+    }
+
+    /**
+     * 更新员工信息
+     *
+     * @author slow
+     * @CurrentTime 2024年7月29日18:03:02
+     */
+    @PutMapping
+    @ApiOperation("更新员工信息")
+    public Result updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        employeeService.updateEmployee(employeeDTO);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询员工信息")
+    public Result<Employee> QueryEmployeeById(@PathVariable Long id) {
+        Employee employee = employeeService.QueryEmployeeById(id);
+        return Result.success(employee);
     }
 
 }
