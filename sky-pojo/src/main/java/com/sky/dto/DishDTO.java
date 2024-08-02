@@ -2,11 +2,14 @@ package com.sky.dto;
 
 import com.sky.entity.DishFlavor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 @Data
 public class DishDTO implements Serializable {
 
@@ -25,5 +28,4 @@ public class DishDTO implements Serializable {
     private Integer status;
     //口味
     private List<DishFlavor> flavors = new ArrayList<>();
-
 }

@@ -6,4 +6,10 @@ sky:
     database: sky_take_out
     username: root
     password: 123456
+  alioss:
+    endpoint: oss-cn-nanjing.aliyuncs.com
+    bucket-name: blogimgoss
+    access-key-id: LTAI5tS3MwFVqFpHvPeJynE9
+    access-key-secret: WBpTcqbY22uKMry6s3QcR43ZE8gBp1
+
 
