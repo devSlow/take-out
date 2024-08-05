@@ -9,7 +9,8 @@ sky:
   alioss:
     endpoint: oss-cn-nanjing.aliyuncs.com
     bucket-name: blogimgoss
-    access-key-id: LTAI5tS3MwFVqFpHvPeJynE9
-    access-key-secret: WBpTcqbY22uKMry6s3QcR43ZE8gBp1
-
-
+    access-key-id: '换成你自己的id'
+    access-key-secret: '换成你自己的秘钥'
+  redis:
+    host: '换成你自己的redis地址'
+    port: 6379
